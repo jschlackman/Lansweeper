@@ -1,6 +1,7 @@
 # Lansweeper Things
+by [James Schlackman](https://www.schlackman.org).
 
-This is a collection of SQL reports and scripts for use with [Lansweeper](https://www.lansweeper.com/]).
+This is a collection of SQL reports and scripts for use with the [Lansweeper](https://www.lansweeper.com/]) network inventory and asset management tool.
 
 ## Reports
 

@@ -17,9 +17,8 @@ Select Top (1000000) tsysOS.Image As icon,
   tblOperatingsystem.Version,
   tblAssets.Domain,
   tblAssets.Username,
-  tblAssets.Userdomain,
   tblAssets.IPAddress,
-  tblAssets.Description,
+  IsNull(tblADComputers.Description, tblAssets.Description) As Description,
   tblAssetCustom.Manufacturer,
   tblAssetCustom.Model,
   tblAssetCustom.Location,
@@ -33,6 +32,7 @@ From tblAssets
     tsysIPLocations.LocationID
   Inner Join tblOperatingsystem
     On tblAssets.AssetID = tblOperatingsystem.AssetID
+  Inner Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
 Where tsysOS.OSname = 'Win 10' And tblOperatingsystem.Version < N'10.0.15063'
   And tblAssetCustom.State = 1
 Order By tblAssets.AssetName

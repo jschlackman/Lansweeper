@@ -10,13 +10,14 @@
 
 */
    
-   Select Top (1000000) tblAssets.AssetID,
+Select Top (1000000) tblAssets.AssetID,
   tblAssets.AssetName,
   Case When tblRegistry.Value = 0 Then 'OFF'
     When tblRegistry.Value = 1 Then 'ON' Else 'UNKNOWN'
   End As DomainFirewallStatus,
   tsysAssetTypes.AssetTypename,
   tsysAssetTypes.AssetTypeIcon10 As icon,
+  tblDomainroles.Domainrolename As DomainRole,
   tblAssets.IPAddress,
   tblAssets.Lastseen,
   tblAssets.Lasttried
@@ -24,6 +25,9 @@ From tblAssets
   Inner Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
   Inner Join tsysAssetTypes On tsysAssetTypes.AssetType = tblAssets.Assettype
   Inner Join tblRegistry On tblAssets.AssetID = tblRegistry.AssetID
+  Inner Join tblComputersystem On tblAssets.AssetID = tblComputersystem.AssetID
+  Inner Join tblDomainroles On tblDomainroles.Domainrole =
+    tblComputersystem.Domainrole
 Where Case When tblRegistry.Value = 0 Then 'OFF'
     When tblRegistry.Value = 1 Then 'ON' Else 'UNKNOWN'
   End <> 'ON' And tblAssetCustom.State = 1 And tblRegistry.Regkey =

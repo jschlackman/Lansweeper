@@ -8,6 +8,7 @@
 
 Select Top (1000000) tblAssets.AssetID,
   tblAssets.AssetName,
+  IsNull(tblADComputers.Description, tblAssets.Description) As Description,
   tblNtlog.Eventcode,
   Case tblNtlog.Eventtype When 1 Then 'Error' When 2 Then 'Warning'
     When 3 Then 'Information' When 4 Then 'Security Audit Success'
@@ -20,7 +21,8 @@ From tblAssets
   Inner Join tblNtlogMessage On tblNtlogMessage.MessageID = tblNtlog.MessageID
   Inner Join tblNtlogSource On tblNtlogSource.SourcenameID =
     tblNtlog.SourcenameID
-  Inner Join tsysAssetTypes On tsysAssetTypes.AssetType = tblAssets.Assettype,
+  Inner Join tsysAssetTypes On tsysAssetTypes.AssetType = tblAssets.Assettype
+  Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID,
   tblState
 Where Case tblNtlog.Eventtype When 1 Then 'Error' When 2 Then 'Warning'
     When 3 Then 'Information' When 4 Then 'Security Audit Success'
@@ -29,6 +31,7 @@ Where Case tblNtlog.Eventtype When 1 Then 'Error' When 2 Then 'Warning'
   tblNtlogSource.Sourcename = 'disk' And tblState.Statename = 'Active'
 Group By tblAssets.AssetID,
   tblAssets.AssetName,
+  IsNull(tblADComputers.Description, tblAssets.Description),
   tblNtlog.Eventcode,
   tblNtlogSource.Sourcename,
   tblNtlogMessage.Message,

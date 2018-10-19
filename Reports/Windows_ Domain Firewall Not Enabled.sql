@@ -16,7 +16,6 @@
 
 Select Top (1000000) tblAssets.AssetID,
   tblAssets.AssetName,
-  tsysAssetTypes.AssetTypename,
   tsysAssetTypes.AssetTypeIcon10 As icon,
   tblDomainroles.Domainrolename As DomainRole,
   tblAssets.IPAddress,

@@ -17,7 +17,6 @@
 
 Select Top (1000000) tblAssets.AssetID,
   tblAssets.AssetName,
-  tsysAssetTypes.AssetTypename,
   tsysAssetTypes.AssetTypeIcon10 As icon,
   Case When tblRegistrySB.Value Is Null Then 'BIOS' Else 'UEFI' End As BootMode,
   Case When tblRegistrySB.Value = 1 Then 'ON' Else 'OFF' End As SecureBoot,

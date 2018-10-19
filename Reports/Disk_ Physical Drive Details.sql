@@ -9,7 +9,6 @@
 
 Select Top 1000000 tblAssets.AssetID,
   tblAssets.AssetName,
-  tsysAssetTypes.AssetTypename,
   tsysAssetTypes.AssetTypeIcon10 As icon,
   tblAssets.IPAddress,
   IsNull(tblADComputers.Description, tblAssets.Description) As Description,

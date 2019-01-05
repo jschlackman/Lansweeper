@@ -13,6 +13,7 @@ Select Top 1000000 tblAssets.AssetID,
   tblAssets.IPAddress,
   tblOperatingsystem.Caption As OSName,
   tblOperatingsystem.Version As OSBuild,
+  tblAssetCustom.Warrantydate As [Warranty Expiration],
   tblAssets.Lastseen,
   tblAssets.Lasttried
 From tblAssets

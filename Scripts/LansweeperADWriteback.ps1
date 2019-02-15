@@ -1,5 +1,6 @@
-# LansweeperADWriteback.ps1
-# -------------------------
+# Name: LansweeperADWriteback.ps1
+# Author: James Schlackman
+# Last Modified: Feb 13 2019
 #
 # Writes basic information gathered from Lansweeper scans back to the identified AD account associated with a workstation (not servers)
 #
@@ -9,11 +10,6 @@
 # 2. Must be run on a computer with the Active Directory module for Windows Powershell installed.
 # 3. Must have write access to AD computer accounts (description, location, serialNumber, and managedBy attributes). Note: set AD permissions
 # using ADSIEdit, as ADUC has a bug where the location attribute cannot be delegated for computer accounts.
-#
-# Author: James Schlackman
-#
-# V1.0 - 2015-04-22 - First version
-# V1.1 - 2018-05-31 - New notes on requirements, restrict to workstations only, set computer's user
 
 Import-Module ActiveDirectory
 
@@ -26,7 +22,6 @@ $query = "SELECT dbo.tblADObjects.sAMAccountName, dbo.tblADComputers.OU, dbo.tbl
  
 # Setup SQL query
 $connection = New-Object System.Data.SqlClient.SqlConnection
-$connection.ConnectionString = $connectionString
 $connection.ConnectionString = "Server=$dataSource;Database=$database;Integrated Security=True;"
 $connection.Open()
 $command = $connection.CreateCommand()

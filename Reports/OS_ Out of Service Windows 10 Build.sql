@@ -5,8 +5,9 @@
    the useless "OS: Not latest Service Pack Windows 10" report, since Microsoft
    have not released Service Packs for any OS since Windows 7 SP1.
    
-   Needs regular updates of the last supported build number. Official reference:
-   https://www.microsoft.com/en-us/itpro/windows-10/release-information
+   Needs regular updates of the last supported build number. Official references:
+   https://docs.microsoft.com/en-us/windows/windows-10/release-information
+   https://support.microsoft.com/en-us/help/13853/windows-lifecycle-fact-sheet
    
 */
 

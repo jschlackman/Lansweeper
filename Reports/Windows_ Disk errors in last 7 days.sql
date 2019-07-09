@@ -28,7 +28,8 @@ Where Case tblNtlog.Eventtype When 1 Then 'Error' When 2 Then 'Warning'
     When 3 Then 'Information' When 4 Then 'Security Audit Success'
     When 5 Then 'Security Audit Failure'
   End = 'Error' And tblNtlog.TimeGenerated > GetDate() - 7 And
-  tblNtlogSource.Sourcename = 'disk' And tblState.Statename = 'Active'
+  tblNtlogSource.Sourcename = 'disk' And tblState.Statename = 'Active' And
+  tblNtlogMessage.Message Like '%Harddisk0%'
 Group By tblAssets.AssetID,
   tblAssets.AssetName,
   IsNull(tblADComputers.Description, tblAssets.Description),

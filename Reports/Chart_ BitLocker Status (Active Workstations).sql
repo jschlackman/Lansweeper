@@ -17,8 +17,11 @@ From (Select Case
           tblComputersystem.AssetID
         Inner Join tblAssetCustom On tblEncryptableVolume.AssetId =
           tblAssetCustom.AssetID
+        Left Join tblADComputers On tblADComputers.AssetID =
+          tblComputersystem.AssetID
       Where tblEncryptableVolume.DriveLetter = N'C:' And tblAssetCustom.State =
-        1 And tblComputersystem.Domainrole = 1 And tblAssetCustom.Contact <>
-        '') As BitLockerStat
+        1 And tblComputersystem.Domainrole = 1 And tblComputersystem.Model <>
+        'Virtual Machine' And (tblAssetCustom.Contact <> '' Or
+          tblADComputers.ManagerADObjectId Is Not Null)) As BitLockerStat
 Group By BitLockerStat.BitLocker
 Order By Status Desc

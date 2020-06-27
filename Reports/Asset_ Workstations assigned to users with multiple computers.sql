@@ -1,16 +1,16 @@
 /* 
    Asset: Workstations assigned to users with multiple computers
    
-   Lists Windows and Mac workstations that are assigned to users who have multiple
-   computers assigned to them (according to the Contact field).
+   Lists Windows workstations that are assigned to users who have multiple
+   computers assigned to them (according to the AD managedBy field).
 
 */
 
 Select Top 1000000 tblAssets.AssetID,
   tblAssets.AssetName,
   tsysAssetTypes.AssetTypeIcon10 As icon,
-  tblAssetCustom.Contact,
   IsNull(tblADComputers.Description, tblAssets.Description) As Description,
+  tblADusers.Displayname As 'Assigned to',
   tblAssets.IPAddress,
   tblAssets.Lastseen,
   tblAssets.Lasttried
@@ -20,14 +20,20 @@ From tblAssets
   Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
   Left Join tblComputersystem On tblAssets.AssetID = tblComputersystem.AssetID
   Inner Join (Select Count(tblAssets.AssetName) As assetCount,
-        tblAssetCustom.Contact
+        tblADComputers.ManagerADObjectId
       From tblAssets
         Inner Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
-      Group By tblAssetCustom.Contact,
+        Inner Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
+      Where tblADComputers.ManagerADObjectId Is Not Null And
+        tblAssetCustom.Model <> 'Virtual Machine'
+      Group By tblADComputers.ManagerADObjectId,
         tblAssetCustom.State
-      Having Count(tblAssets.AssetName) > 1 And tblAssetCustom.Contact <> '' And
-        tblAssetCustom.State = 1) As multiAssets On multiAssets.Contact =
-    tblAssetCustom.Contact And multiAssets.Contact = tblAssetCustom.Contact
+      Having Count(tblAssets.AssetName) > 1 And tblAssetCustom.State =
+        1) As multiAssets On multiAssets.ManagerADObjectId =
+    tblADComputers.ManagerADObjectId And multiAssets.ManagerADObjectId =
+    tblADComputers.ManagerADObjectId
+  Inner Join tblADusers On
+    tblADusers.ADObjectID = tblADComputers.ManagerADObjectId
 Where tblAssetCustom.State = 1 And tblAssets.Assettype In ( -1, 13)
-Order By tblAssetCustom.Contact,
+Order By 'Assigned to',
   tblAssets.AssetName

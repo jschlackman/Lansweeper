@@ -29,6 +29,6 @@ From tblAssets
         N'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders' And tblRegistry.Valuename = N'Personal') As tblDocsFolder On tblAssets.AssetID = tblDocsFolder.AssetID
   Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
 Where tblAssets.Username Not Like '%admin%' And tblDocsFolder.Value =
-  '%USERPROFILE%\Documents' And tblAssetCustom.Contact <> '' And
-  tblComputersystem.Domainrole < 2 And tblAssetCustom.State = 1
+  '%USERPROFILE%\Documents' And tblComputersystem.Domainrole < 2 And
+  tblAssetCustom.State = 1 And tblADComputers.ManagerADObjectId Is Not Null
 Order By tblAssets.AssetName

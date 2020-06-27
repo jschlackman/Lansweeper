@@ -70,11 +70,11 @@ If ($connection.State -eq "Open") {
     } Else {
         Write-Host "Computer records loaded: $($table.Rows.Count)" -ForegroundColor Green
         Write-Host "Starting update..."
+
+		# Initialize progress counter
+		$progcount = 0
     }
-
-    $progcount = 0
-    #Write-Progress -Activity "Updating AD objects" -PercentComplete 0
-
+	
     # Update AD accounts for each record in the table
     $table | ForEach-Object {
 

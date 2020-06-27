@@ -12,8 +12,9 @@ Select Top 1000000 tblAssets.AssetID,
   IsNull(tblADComputers.Description, tblAssets.Description) As Description,
   tblAssets.IPAddress,
   tblOperatingsystem.Caption As OSName,
-  tblOperatingsystem.Version As OSBuild,
-  tblAssetCustom.Warrantydate As [Warranty Expiration],
+  tblAssets.Version As Build,
+  Cast(tblAssetCustom.Warrantydate As Date) As [Warranty Expiration],
+  tblAssetCustom.Location,
   tblAssets.Lastseen,
   tblAssets.Lasttried
 From tblAssets
@@ -21,9 +22,8 @@ From tblAssets
   Inner Join tsysAssetTypes On tsysAssetTypes.AssetType = tblAssets.Assettype
   Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
   Inner Join tblComputersystem On tblAssets.AssetID = tblComputersystem.AssetID
-  Inner Join tblOperatingsystem
-    On tblAssets.AssetID = tblOperatingsystem.AssetID
-Where tblComputersystem.Domainrole = 1 And
-  tblAssetCustom.State = 1 And
+  Inner Join tblOperatingsystem On
+    tblAssets.AssetID = tblOperatingsystem.AssetID
+Where tblComputersystem.Domainrole = 1 And tblAssetCustom.State = 1 And
   IsNull(tblAssetCustom.Contact, '') = '' And
-  IsNull(tblADComputers.ManagerADObjectId, '') = ''
+  tblADComputers.ManagerADObjectId Is Null

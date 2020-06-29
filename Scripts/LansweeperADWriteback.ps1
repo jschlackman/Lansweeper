@@ -22,7 +22,7 @@ $ExportPath = "$([IO.Path]::GetDirectoryName((Get-ItemProperty -Path HKLM:\SYSTE
 $ExportFile = "$ExportPath\Windows Active Directory Writeback.csv"
 
 # Maximum allowed age of export file in hours (default is 24h assuming export is performed daily)
-$MaxExportAge = 1
+$MaxExportAge = 24
 
 Write-Host ''
 
@@ -41,7 +41,7 @@ If (!(Test-Path -Path $ExportFile)) {
         # Read CSV file
         Write-Host "Reading export file $ExportFile..."
 
-        # Lansweeper sometimes uses non-comma delimeters due to a bug. This checks the last character of the header row to determine Check export data in a text editor before first run and remove the Delimiter option below if this is the case.
+        # Lansweeper sometimes uses non-comma delimiters due to a bug. This checks the last character of the header row to determine the correct delimiter to use.
         $table = Import-Csv -Path $ExportFile -Delimiter (Get-Content -Path $ExportFile -First 1)[-1]
 
 

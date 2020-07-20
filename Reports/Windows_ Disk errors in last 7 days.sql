@@ -10,10 +10,8 @@ Select Top (1000000) tblAssets.AssetID,
   tblAssets.AssetName,
   IsNull(tblADComputers.Description, tblAssets.Description) As Description,
   tblNtlog.Eventcode,
-  Case tblNtlog.Eventtype When 1 Then 'Error' When 2 Then 'Warning'
-    When 3 Then 'Information' When 4 Then 'Security Audit Success'
-    When 5 Then 'Security Audit Failure' End As EventType,
   Max(tblNtlog.TimeGenerated) As LastError,
+  Count(tblNtlog.TimeGenerated) As ErrorCount,
   tblNtlogSource.Sourcename,
   tblNtlogMessage.Message
 From tblAssets
@@ -22,14 +20,10 @@ From tblAssets
   Inner Join tblNtlogSource On tblNtlogSource.SourcenameID =
     tblNtlog.SourcenameID
   Inner Join tsysAssetTypes On tsysAssetTypes.AssetType = tblAssets.Assettype
-  Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID,
-  tblState
-Where Case tblNtlog.Eventtype When 1 Then 'Error' When 2 Then 'Warning'
-    When 3 Then 'Information' When 4 Then 'Security Audit Success'
-    When 5 Then 'Security Audit Failure'
-  End = 'Error' And tblNtlog.TimeGenerated > GetDate() - 7 And
-  tblNtlogSource.Sourcename = 'disk' And tblState.Statename = 'Active' And
-  tblNtlogMessage.Message Like '%Harddisk0%'
+  Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
+  Inner Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
+Where tblNtlogSource.Sourcename = 'disk' And tblNtlogMessage.Message Like
+  '%Harddisk0%' And tblNtlog.Eventtype = 1 And tblAssetCustom.State = 1
 Group By tblAssets.AssetID,
   tblAssets.AssetName,
   IsNull(tblADComputers.Description, tblAssets.Description),
@@ -37,6 +31,6 @@ Group By tblAssets.AssetID,
   tblNtlogSource.Sourcename,
   tblNtlogMessage.Message,
   tblNtlog.Eventtype,
-  tblState.Statename
-Having tblNtlog.Eventcode <> 11
+  tblAssetCustom.State
+Having tblNtlog.Eventcode <> 11 And Max(tblNtlog.TimeGenerated) > GetDate() - 7
 Order By LastError Desc

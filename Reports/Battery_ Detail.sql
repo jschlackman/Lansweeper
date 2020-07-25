@@ -23,5 +23,5 @@ From tblAssets
   Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
   Inner Join tblPortableBattery On
     tblAssets.AssetID = tblPortableBattery.AssetID
-Where tblAssetCustom.State = 1
-Order By tblAssets.AssetName
+Where tblPortableBattery.DesignCapacity > 0 And tblAssetCustom.State = 1
+Order By tblAssets.AssetName 

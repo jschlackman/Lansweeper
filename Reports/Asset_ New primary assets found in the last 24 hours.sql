@@ -15,6 +15,7 @@ From tblAssetCustom
   Inner Join tblAssets On tblAssetCustom.AssetID = tblAssets.AssetID
   Inner Join tsysAssetTypes On tblAssets.Assettype = tsysAssetTypes.AssetType
   Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
-Where tblAssets.Firstseen > GetDate() - 1 And tblAssetCustom.State = 1
-  And tblAssets.Assettype <> 208
+Where (Not tblAssets.AssetName = 'DockerDesktopVM' Or Not tblAssets.Assettype =
+    92) And tblAssets.Firstseen > GetDate() - 1 And tblAssetCustom.State = 1 And
+  tblAssets.Assettype <> 208
 Order By tblAssets.AssetName

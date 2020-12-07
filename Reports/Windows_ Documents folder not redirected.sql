@@ -5,6 +5,12 @@
   had their Documents folder redirected. Useful for detecting instances where
   automatic redirection by OneDrive for Business is not functioning correctly.
   
+  Requires a custom registry scan to be defined in Lansweeper as follows:
+  
+  Rootkey: HKEY_CURRENT_USER
+  RegPath: Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders
+  RegValue: Personal
+  
 */
 
 Select Top (1000000) tblAssets.AssetID,

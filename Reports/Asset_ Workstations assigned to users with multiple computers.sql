@@ -25,6 +25,7 @@ From tblAssets
         Inner Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
         Inner Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
       Where tblADComputers.ManagerADObjectId Is Not Null And
+        tblComputersystem.Domainrole = 1 And
         tblAssetCustom.Model <> 'Virtual Machine'
       Group By tblADComputers.ManagerADObjectId,
         tblAssetCustom.State

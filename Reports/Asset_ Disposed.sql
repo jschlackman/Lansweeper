@@ -20,13 +20,13 @@
 
 Select Top 1000000 tblAssets.AssetID,
   tblAssets.AssetName,
+  tblAssetCustom.PurchaseDate,
   tsysAssetTypes.AssetTypeIcon10 As icon,
   tblAssetCustom.Manufacturer,
   tblAssetCustom.Model,
   tblAssetCustom.Serialnumber,
   tblAssetCustom.Contact,
   Cast(tblAssetCustom.Custom4 As Date) As [Disposal Date],
-  tblAssetCustom.PurchaseDate,
   tblAssetCustom.Custom1 As [Purchase Cost],
   tblAssetCustom.Custom2 As Vendor,
   tblAssetCustom.OrderNumber,
@@ -36,9 +36,7 @@ Select Top 1000000 tblAssets.AssetID,
 From tblAssets
   Inner Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
   Inner Join tsysAssetTypes On tsysAssetTypes.AssetType = tblAssets.Assettype
-  Inner Join tblComputersystem On tblAssets.AssetID = tblComputersystem.AssetID
-  Inner Join tblDomainroles On tblDomainroles.Domainrole =
-    tblComputersystem.Domainrole
 Where tblAssetCustom.State = 10
 Order By [Disposal Date],
+  tblAssetCustom.PurchaseDate,
   tblAssets.AssetName

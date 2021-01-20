@@ -37,6 +37,6 @@ From tblAssets
   Where
     tblRegistry.Regkey =
     N'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile' And tblRegistry.Valuename = N'EnableFirewall') As tblGPOFWPolicy On tblGPOFWPolicy.AssetID = tblAssets.AssetID
-Where IsNull(tblLocalFWPolicy.Value, 0) = 0 And IsNull(tblGPOFWPolicy.Value, 0) = 0 And tblAssetCustom.State = 1
+Where IsNull(tblLocalFWPolicy.Value, 0) = 0 And IsNull(tblGPOFWPolicy.Value, 0) = 0 And tblAssetCustom.State = 1 And tblComputersystem.Domainrole <> 0 And tblComputersystem.Domainrole <> 2
 Order By DomainRole,
   tblAssets.AssetName

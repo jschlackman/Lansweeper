@@ -40,7 +40,8 @@ From tblAssets
   Left Join tsysOS On tblAssets.OScode = tsysOS.OScode
   Left Join tblMacOSInfo On tblAssets.AssetID = tblMacOSInfo.AssetID
   Left Join tblComputersystem On tblAssets.AssetID = tblComputersystem.AssetID
-Where (tblAssets.Assettype Not In ( -1, 13, 39, 66, 70, 208) Or
-    tblComputersystem.Domainrole > 1) And tblAssetCustom.State = 1
+Where IsNull(tblAssets.IPAddress, '') <> '' And (tblAssets.Assettype Not In (
+    -1, 13, 39, 66, 70, 208) Or tblComputersystem.Domainrole > 1) And
+  tblAssetCustom.State = 1
 Order By AssetType,
   tblAssets.AssetName

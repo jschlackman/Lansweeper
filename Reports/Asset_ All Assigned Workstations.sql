@@ -12,6 +12,7 @@ Select Top (1000000) tblAssets.AssetID,
   tblAssetCustom.Serialnumber,
   tblOperatingsystem.Caption As OSName,
   Cast(tblAssetCustom.Warrantydate As Date) As WarrantyDate,
+  tblADusers.email As [Owner Email],
   tblAssets.Firstseen,
   tblAssets.Lastseen,
   SoftwareHist.FirstScan
@@ -30,5 +31,8 @@ From tblAssets
       From tblSoftwareHist
       Group By tblSoftwareHist.AssetID) SoftwareHist On SoftwareHist.AssetID =
     tblAssets.AssetID
-Where tblADComputers.ManagerADObjectId Is Not Null And
-  tblDomainroles.Domainrole = 1 And tblAssetCustom.State = 1
+  Left Join tblADusers On
+    tblADusers.ADObjectID = tblADComputers.ManagerADObjectId
+Where tblADComputers.ManagerADObjectId
+  Is Not Null And tblDomainroles.Domainrole = 1 And
+  Not tblAssets.Description Like '%Server%' And tblAssetCustom.State = 1

@@ -14,8 +14,8 @@
 Select Top (1000000) tsysOS.Image As icon,
   tblAssets.AssetID,
   tblAssets.AssetName,
-  tsysOS.OSname As OS,
   tblAssets.OScode As Version,
+  tblAssets.Version As Release,
   tblAssets.Domain,
   tblAssets.Username,
   tblAssets.IPAddress,
@@ -34,6 +34,6 @@ From tblAssets
   Inner Join tblOperatingsystem On
     tblAssets.AssetID = tblOperatingsystem.AssetID
   Inner Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
-Where tsysOS.OSname = 'Win 10' And tblAssets.OScode < N'10.0.15063' And
+Where tsysOS.OSname = 'Win 10' And tblAssets.OScode < N'10.0.18363' And
   tblAssetCustom.State = 1
 Order By tblAssets.AssetName

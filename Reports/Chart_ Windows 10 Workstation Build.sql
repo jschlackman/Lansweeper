@@ -13,7 +13,6 @@ From tblAssets
       tblAssets.OScode
   Inner Join tblComputersystem On tblAssets.AssetID = tblComputersystem.AssetID
   Inner Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
-Where tblAssets.OScode Like N'10%' And tblComputersystem.Domainrole < 2 And
+Where tblAssets.OScode Like N'10.0.1%' And tblComputersystem.Domainrole < 2 And
   tblAssetCustom.State = 1
-Group By BuildRelease.Version,
-  tblAssets.OScode
+Group By BuildRelease.Version

@@ -1,7 +1,7 @@
 /*
    Asset: Unallocated Workstations
    
-   Lists active domain workstations with no Contact, managedBy user, or Location filled in.
+   Lists active domain workstations with no Contact filled on or managedBy user in AD.
 
 */
 
@@ -24,7 +24,9 @@ From tblAssets
   Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
   Inner Join tblComputersystem On tblAssets.AssetID = tblComputersystem.AssetID
   Inner Join tblOperatingsystem On
-    tblAssets.AssetID = tblOperatingsystem.AssetID
+      tblAssets.AssetID = tblOperatingsystem.AssetID
 Where tblComputersystem.Domainrole = 1 And tblAssetCustom.State = 1 And
-  IsNull(tblAssetCustom.Contact, '') = '' And
-  tblADComputers.ManagerADObjectId Is Null
+  IsNull(tblAssetCustom.Contact, '') = '' And tblADComputers.ManagerADObjectId
+  Is Null
+Order By Warranty,
+  tblAssets.AssetName

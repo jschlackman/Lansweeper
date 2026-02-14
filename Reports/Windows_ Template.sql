@@ -3,7 +3,6 @@
 	
 	Enhanced template for Windows asset reports that includes domain role and
 	description (from AD if filled in, otherwise from Lansweeper)
-	
 */
 
 Select Top 1000000 tblAssets.AssetID,

@@ -1,7 +1,7 @@
 /* 
    Windows: Active Directory Writeback
    
-   Lists Windows computer details to be written back to Active Directory using the LansweeperADWriteback.ps1 script.
+   Lists Windows computer details to be written back to Active Directory using the Lansweeper-UpdateComputers.ps1 script.
 
 */
 SELECT

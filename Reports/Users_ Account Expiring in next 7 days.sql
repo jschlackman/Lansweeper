@@ -4,16 +4,13 @@ Select Top 1000000 tblADusers.Displayname As Name,
   tblADusers.Email,
   IsNull(tblADusers.Title, tblADusers.Description) As Description,
   tblADusers.Department,
-  Format(tblADusers.whenCreated, 'd') As [Account Created]
+  Format(tblADusers.whenCreated, 'd') As [Account Created],
+  tblADmanagers.Displayname As Manager,
+  tblADmanagers.email As [Manager Email]
 From tblADusers
-  Inner Join (Select tblADMembership.ChildAdObjectID,
-      STRING_AGG(tblADGroups.Name, '; ') As ADGroups
-    From tblADMembership
-      Inner Join tblADGroups On tblADGroups.ADObjectID =
-          tblADMembership.ParentAdObjectID
-    Group By tblADMembership.ChildAdObjectID) GroupList On
-      GroupList.ChildAdObjectID = tblADusers.ADObjectID
-Where tblADusers.ExpirationDate > GetDate()  And
+  Left Join tblADusers tblADmanagers On tblADusers.ManagerADObjectId =
+      tblADmanagers.ADObjectID
+Where tblADusers.ExpirationDate > GetDate() And
   tblADusers.ExpirationDate < DateAdd(d, 7, GetDate()) And
   tblADusers.IsEnabled = 1
 Order By tblADusers.ExpirationDate

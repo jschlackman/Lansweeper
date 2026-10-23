@@ -41,12 +41,16 @@ Select Top (1000000) tblAssets.AssetID,
   tblRegSBUEFICA2023Status.Value As UEFICA2023Status,
   tblRegSBConfidenceLevel.Value As ConfidenceLevel,
   tblRegSBUEFICA2023Error.Value As UEFICA2023Error,
+  tblRegBootMgrError.Value As BootMgrErrorReason,
   tblOperatingsystem.Caption As OSVersion,
   tblAssets.Version As Release,
   tblDomainroles.Domainrolename As DomainRole,
+  tblAssets.Domain,
   tblAssets.IPAddress,
   tblAssets.Lastseen,
-  tblAssets.Lasttried
+  tblAssets.Lasttried,
+  tblBIOS.ReleaseDate,
+  tblBIOS.SMBIOSBIOSVersion
 From tblAssets
   Left Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
   Left Outer Join (Select tblRegistry.RegistryID,
@@ -66,9 +70,7 @@ From tblAssets
     From tblRegistry
     Where
       tblRegistry.Regkey =
-      N'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing'
-	  And tblRegistry.Valuename = N'UEFICA2023Status') As tblRegSBUEFICA2023Status
-	On tblAssets.AssetID = tblRegSBUEFICA2023Status.AssetID
+      N'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing' And tblRegistry.Valuename = N'UEFICA2023Status') As tblRegSBUEFICA2023Status On tblAssets.AssetID = tblRegSBUEFICA2023Status.AssetID
   Left Outer Join (Select tblRegistry.RegistryID,
       tblRegistry.AssetID,
       tblRegistry.Value,
@@ -76,9 +78,7 @@ From tblAssets
     From tblRegistry
     Where
       tblRegistry.Regkey =
-      N'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing'
-	  And tblRegistry.Valuename = N'UEFICA2023Error') As tblRegSBUEFICA2023Error
-	On tblAssets.AssetID = tblRegSBUEFICA2023Error.AssetID
+      N'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing' And tblRegistry.Valuename = N'UEFICA2023Error') As tblRegSBUEFICA2023Error On tblAssets.AssetID = tblRegSBUEFICA2023Error.AssetID
   Left Outer Join (Select tblRegistry.RegistryID,
       tblRegistry.AssetID,
       tblRegistry.Value,
@@ -86,9 +86,15 @@ From tblAssets
     From tblRegistry
     Where
       tblRegistry.Regkey =
-      N'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing'
-	  And tblRegistry.Valuename = N'ConfidenceLevel') As tblRegSBConfidenceLevel
-	On tblAssets.AssetID = tblRegSBConfidenceLevel.AssetID
+      N'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing' And tblRegistry.Valuename = N'BootMgrLastUpdateErrorReason') As tblRegBootMgrError On tblAssets.AssetID = tblRegBootMgrError.AssetID
+  Left Outer Join (Select tblRegistry.RegistryID,
+      tblRegistry.AssetID,
+      tblRegistry.Value,
+      tblRegistry.Lastchanged
+    From tblRegistry
+    Where
+      tblRegistry.Regkey =
+      N'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing' And tblRegistry.Valuename = N'ConfidenceLevel') As tblRegSBConfidenceLevel On tblAssets.AssetID = tblRegSBConfidenceLevel.AssetID
   Left Outer Join tsysAssetTypes On tsysAssetTypes.AssetType =
       tblAssets.Assettype
   Left Join tblComputersystem On tblAssets.AssetID = tblComputersystem.AssetID
@@ -97,6 +103,7 @@ From tblAssets
   Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
   Left Join tblTPM On tblAssets.AssetID = tblTPM.AssetId
   Left Join tblOperatingsystem On tblAssets.AssetID = tblOperatingsystem.AssetID
+  Inner Join tblBIOS On tblAssets.AssetID = tblBIOS.AssetID
 Where tsysAssetTypes.AssetTypename = N'Windows' And tblAssetCustom.State = 1
 Order By tblComputersystem.DomainRole,
   tblAssets.AssetName
